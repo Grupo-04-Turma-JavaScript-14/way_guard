@@ -1,98 +1,245 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🛫 API de Seguro de Viagem
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 📌 Descrição do Projeto
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Este projeto consiste no desenvolvimento de uma **API RESTful** para gerenciamento de **seguros de viagem**, construída utilizando **Node.js**, **TypeScript**, **NestJS** e **TypeORM**.
 
-## Description
+O sistema permite cadastrar clientes, destinos e seguros de viagem, aplicando regras de negócio para calcular automaticamente o valor do seguro com base na quantidade de dias da viagem e no destino escolhido.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Este projeto foi desenvolvido como parte de um **bootcamp de desenvolvimento backend**, com foco em boas práticas de arquitetura, organização de código e aplicação de regras de negócio em APIs.
 
-## Project setup
+---
 
-```bash
-$ npm install
+## 🎯 Objetivo
+
+Criar um CRUD completo para gerenciamento de seguros de viagem, aplicando regras de negócio reais e preparando a aplicação para evoluções futuras, como integração com APIs externas.
+
+---
+
+## 🧰 Tecnologias Utilizadas
+
+* Node.js
+* TypeScript
+* NestJS
+* TypeORM
+* SQLite ou PostgreSQL
+* REST API
+
+---
+
+## 🏗️ Arquitetura do Projeto
+
+A aplicação segue a arquitetura padrão do **NestJS**, baseada em módulos.
+
+```
+src
+│
+├── cliente
+│   ├── cliente.controller.ts
+│   ├── cliente.service.ts
+│   ├── cliente.module.ts
+│   └── entities
+│       └── cliente.entity.ts
+│
+├── destino
+│   ├── destino.controller.ts
+│   ├── destino.service.ts
+│   ├── destino.module.ts
+│   └── entities
+│       └── destino.entity.ts
+│
+├── seguro
+│   ├── seguro.controller.ts
+│   ├── seguro.service.ts
+│   ├── seguro.module.ts
+│   └── entities
+│       └── seguro.entity.ts
+│
+└── database
+    └── data-source.ts
 ```
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ npm run start
+## 🗄️ Diagrama Entidade-Relacionamento (DER)
 
-# watch mode
-$ npm run start:dev
+```mermaid
+erDiagram
 
-# production mode
-$ npm run start:prod
+CLIENTE {
+    int id PK
+    string nome
+    string email
+    string telefone
+}
+
+DESTINO {
+    int id PK
+    string pais
+    string continente
+}
+
+SEGURO {
+    int id PK
+    date dataInicio
+    date dataFim
+    int quantidadeDias
+    decimal valorBase
+    decimal valorFinal
+    int clienteId FK
+    int destinoId FK
+}
+
+CLIENTE ||--o{ SEGURO : possui
+DESTINO ||--o{ SEGURO : destino
 ```
 
-## Run tests
+### 📌 Descrição dos Relacionamentos
 
-```bash
-# unit tests
-$ npm run test
+* Um **Cliente** pode possuir vários **Seguros**
+* Um **Destino** pode estar associado a vários **Seguros**
+* Um **Seguro** pertence a um único **Cliente**
+* Um **Seguro** possui um único **Destino**
 
-# e2e tests
-$ npm run test:e2e
+---
 
-# test coverage
-$ npm run test:cov
+## 🗄️ Modelo de Dados (Entidades)
+
+### Cliente
+
+* id
+* nome
+* email
+* telefone
+
+### Destino
+
+* id
+* pais
+* continente
+
+### Seguro
+
+* id
+* dataInicio
+* dataFim
+* quantidadeDias
+* valorBase
+* valorFinal
+* clienteId
+* destinoId
+
+---
+
+## 📐 Regras de Negócio
+
+### 1. Cálculo do Valor do Seguro
+
+O valor do seguro é calculado com base na quantidade de dias da viagem.
+
+```
+Valor base por dia: R$ 10
+
+valorBase = quantidadeDias × valorPorDia
 ```
 
-## Deployment
+### 2. Regra Especial para Destinos
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Se o destino for:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+* USA
+* Canada
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+Será aplicado um acréscimo de **20%** sobre o valor final.
+
+```
+valorFinal = valorBase × 1.2
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Caso contrário:
 
-## Resources
+```
+valorFinal = valorBase
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+---
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## 🚀 Endpoints da API
 
-## Support
+### Cliente
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```
+POST   /clientes
+GET    /clientes
+GET    /clientes/:id
+PUT    /clientes/:id
+DELETE /clientes/:id
+```
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## 🔮 Melhorias Futuras (Roadmap)
+
+Esta seção representa evoluções planejadas para tornar o sistema mais realista e próximo de um ambiente de produção.
+
+### 1. Integração com API de Distância entre Localidades
+
+Uma melhoria futura será integrar a aplicação com uma API externa que forneça a distância entre a origem e o destino da viagem.
+
+
+
+#### Objetivo
+
+Utilizar a distância da viagem como fator adicional no cálculo do valor do seguro.
+
+
+### 2. Autenticação e Autorização (JWT)
+
+Implementar controle de acesso utilizando:
+
+* Login
+* Registro de usuários
+* Token JWT
+* Guards
+
+Objetivo:
+
+Permitir que apenas usuários autenticados possam criar e consultar seguros.
+
+---
+
+### 3. Documentação com Swagger
+
+Adicionar documentação automática da API.
+
+Benefícios:
+
+* Testar endpoints diretamente no navegador
+* Facilitar integração com front-end
+* Melhorar experiência de desenvolvimento
+
+
+
+---
+
+## 🧠 Aprendizados Demonstrados no Projeto
+
+Este projeto demonstra conhecimento em:
+
+* Criação de APIs REST com NestJS
+* Organização modular
+* Uso de TypeScript
+* Uso de TypeORM
+* Relacionamento entre entidades
+* Implementação de regras de negócio
+* Boas práticas de desenvolvimento backend
+
+---
+
+👥 Equipe
+Product Owner: José Javier/Samara Ferreira
+Scrum Master: Marlos Santos
+Desenvolvedores: Mariana Soares, Mirelly Santos, João Brito.
+QA Tester: Henrique Ferreira 
