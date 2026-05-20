@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body, Get, Put, Delete, Param } from '@nestjs/common';
 import { SeguroService } from './seguro.service';
 import { CreateSeguroDto } from './dto/create-seguro.dto';
 
@@ -14,5 +14,15 @@ export class SeguroController {
   @Get()
   findAll() {
     return this.seguroService.findAll();
+  }
+
+  @Put(':id')
+  update(@Param('id') id: string, @Body() createSeguroDto: CreateSeguroDto) {
+    return this.seguroService.update(+id, createSeguroDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.seguroService.remove(+id);
   }
 }

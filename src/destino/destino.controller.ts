@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Put, Param, Delete } from '@nestjs/common';
 import { DestinoService } from './destino.service';
 import { CreateDestinoDto } from './dto/create-destino.dto';
 import { UpdateDestinoDto } from './dto/update-destino.dto';
@@ -24,6 +24,11 @@ export class DestinoController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDestinoDto: UpdateDestinoDto) {
+    return this.destinoService.update(+id, updateDestinoDto);
+  }
+
+  @Put(':id')
+  updatePut(@Param('id') id: string, @Body() updateDestinoDto: UpdateDestinoDto) {
     return this.destinoService.update(+id, updateDestinoDto);
   }
 
